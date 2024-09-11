@@ -104,6 +104,198 @@ def menu():
 def is_palindrome(string):
     return string == string[::-1]
 
-            
+#Question 18 Write two Python programs, one using a loop and another using list comprehension, to achieve the same functionality of squaring all the elements in a list.
+def same_loop(list):
+    squared_list = []
+    for num in list:
+        squared_list.append(num ** 2)
+    print(squared_list)
+    newlist = [x**2 for x in list]
+    print(newlist)
     
+#Question 19 Write a Python program to find the second largest element in a list.
+def second_largest(numbers):
+    numbers.sort()
+    return numbers[-2]
+
+#Question 21: Write a Python program to implement a recursive function for calculating the factorial of a number.
+def factorial(n):
+    if n == 0:
+        return 1
+    else:
+        return n * factorial(n - 1)
+    
+#Question 22 Write a Python program to implement a function for finding the GCD (Greatest Common Divisor) of two numbers.
+def gcd(a, b):
+    if b == 0:
+        return a
+    else:
+        return gcd(b, a % b)
+    
+#Question 23: Write a Python program to implement a function for checking if a string is a valid parenthesis expression.
+def is_valid_parentheses(expression):
+    stack = []
+    opening_parentheses = ['(', '[', '{']
+    closing_parentheses = [')', ']', '}']
+    parentheses_mapping = {')': '(', ']': '[', '}': '{'}
+
+    for char in expression:
+        if char in opening_parentheses:
+            stack.append(char)
+        elif char in closing_parentheses:
+            if not stack or parentheses_mapping[char]!= stack.pop():
+                return False
+
+    return not stack
+
+#Question 24 Write a Python program to implement a function for finding the longest common substring in two strings.
+def longest_common_substring(str1, str2):
+    m, n = len(str1), len(str2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    max_length = 0
+    end_index = 0
+
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if str1[i - 1] == str2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+                if dp[i][j] > max_length:
+                    max_length = dp[i][j]
+                    end_index = i - 1
+
+    return str1[end_index - max_length + 1: end_index + 1]
+
+#Question 25 Write a Python program to implement a function for performing memoization on a function.
+def memoize(func):
+    cache = {}
+
+    def wrapper(n):
+        if n not in cache:
+            cache[n] = func(n)
+        return cache[n]
+
+    return wrapper
+            
+#Question 26 Write a Python program to implement a custom data structure like a binary search tree (BST).
+class Node:
+    def __init__(self, key):
+        self.key = key
+        self.left = None
+        self.right = None
+
+class BinarySearchTree:
+    def __init__(self):
+        self.root = None
+
+    # Insert a new node with the given key
+    def insert(self, key):
+        if self.root is None:
+            self.root = Node(key)
+        else:
+            self._insert(self.root, key)
+
+    def _insert(self, root, key):
+        if key < root.key:
+            if root.left is None:
+                root.left = Node(key)
+            else:
+                self._insert(root.left, key)
+        elif key > root.key:
+            if root.right is None:
+                root.right = Node(key)
+            else:
+                self._insert(root.right, key)
+
+    # Search for a node with a given key
+    def search(self, key):
+        return self._search(self.root, key)
+
+    def _search(self, root, key):
+        if root is None or root.key == key:
+            return root
+        if key < root.key:
+            return self._search(root.left, key)
+        return self._search(root.right, key)
+
+    # Inorder Traversal (left, root, right)
+    def inorder(self):
+        elements = []
+        self._inorder(self.root, elements)
+        return elements
+
+    def _inorder(self, root, elements):
+        if root:
+            self._inorder(root.left, elements)
+            elements.append(root.key)
+            self._inorder(root.right, elements)
+
+    # Preorder Traversal (root, left, right)
+    def preorder(self):
+        elements = []
+        self._preorder(self.root, elements)
+        return elements
+
+    def _preorder(self, root, elements):
+        if root:
+            elements.append(root.key)
+            self._preorder(root.left, elements)
+            self._preorder(root.right, elements)
+
+    # Postorder Traversal (left, right, root)
+    def postorder(self):
+        elements = []
+        self._postorder(self.root, elements)
+        return elements
+
+    def _postorder(self, root, elements):
+        if root:
+            self._postorder(root.left, elements)
+            self._postorder(root.right, elements)
+            elements.append(root.key)
+
+    # Find the minimum value in the BST
+    def find_min(self):
+        current = self.root
+        while current and current.left is not None:
+            current = current.left
+        return current.key if current else None
+
+    # Find the maximum value in the BST
+    def find_max(self):
+        current = self.root
+        while current and current.right is not None:
+            current = current.right
+        return current.key if current else None
+
+    # Delete a node from the BST
+    def delete(self, key):
+        self.root = self._delete(self.root, key)
+
+    def _delete(self, root, key):
+        if root is None:
+            return root
+
+        if key < root.key:
+            root.left = self._delete(root.left, key)
+        elif key > root.key:
+            root.right = self._delete(root.right, key)
+        else:
+            # Node with only one child or no child
+            if root.left is None:
+                return root.right
+            elif root.right is None:
+                return root.left
+
+            # Node with two children: Get the inorder successor (smallest in the right subtree)
+            min_larger_node = self._find_min(root.right)
+            root.key = min_larger_node.key
+            root.right = self._delete(root.right, min_larger_node.key)
+
+        return root
+
+    def _find_min(self, root):
+        current = root
+        while current.left is not None:
+            current = current.left
+        return current
         
