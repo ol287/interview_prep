@@ -298,4 +298,68 @@ class BinarySearchTree:
         while current.left is not None:
             current = current.left
         return current
+    
+# Question 27 Write a Python program to implement a function for parsing a JSON string and converting it into a Python dictionary.
+import json
+
+def parse_json(json_string):
+    data = json.loads(json_string)
+    try:
+        data = json.loads(json_string)
+        return data
+    except json.JSONDecodeError as e:
+        print(f"Error parsing JSON: {e}")
+        return None
+    
+#Questiion 28 Write a Python program to implement a multithreaded application using the threading module.
+import threading
+import time
+
+class NumberPrinter(threading.Thread):
+    def __init__(self):
+        super().__init__()  # Call the base class constructor
+
+    def run(self):
+        # This method will be called when thread starts
+        for i in range(1, 6):
+            print(f"Thread 1 - Number: {i}")
+
+class LetterPrinter(threading.Thread):
+    def __init__(self):
+        super().__init__()  # Call the base class constructor
+
+    def run(self):
+        # This method will be called when thread starts
+        for letter in ['A', 'B', 'C', 'D', 'E']:
+            print(f"Thread 2 - Letter: {letter}")
+
+#Question 29: Write a Python program to implement a web scraper
+import requests
+from bs4 import BeautifulSoup
+
+def scrape_website(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    # Find all the links on the page
+    links = soup.find_all('a')
+    for link in links:
+        print(link.get('href'))
+        
+        
+#Question 30: Write a Python program to implement a function for finding the minimum edit distance between two strings.
+def min_edit_distance(str1, str2):
+    m, n = len(str1), len(str2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+    # Fill the DP table
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if str1[i - 1] == str2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1]
+            else:
+                dp[i][j] = 1 + min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1])
+
+    return dp[m][n]
+
         
